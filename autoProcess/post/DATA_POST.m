@@ -353,113 +353,145 @@ bin3_data_liq{4,4,2} = load ('bin3_0.04_results/data/68.00s_downcomer_liq.txt');
 % --------------------------------------------------6---------------------------------------------------------%
 %Local_liquid_velocity along X
 
-for sgv_index = 1:1:4
-	riser_liq = bin3_data_liq{3,sgv_index,1};
-	riser_liq_Y_sorted = sortrows(riser_liq,2);
-	max_index = size(riser_liq_Y_sorted);
-	temp = 0;
-	height = 0.1;
-	h_index = 1;
-    n = 1;
-    i = 1;
-	while n <= max_index(1,1)
-		if(riser_liq_Y_sorted(n,2) > 0.1 && riser_liq_Y_sorted(n,2) < 0.7)
-			if(riser_liq_Y_sorted(n,2) > height && riser_liq_Y_sorted(n,2) < height + 0.2)
-				if( i == 1)
-					temp = riser_liq_Y_sorted(n,2);
-					Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
-					Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
-					% Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
-					i = i + 1;
-				elseif (riser_liq_Y_sorted(n,2) == temp)
-					Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
-					Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
-					% Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
-					i = i + 1;
+% for sgv_index = 1:1:4
+% 	riser_liq = bin3_data_liq{3,sgv_index,1};
+% 	riser_liq_Y_sorted = sortrows(riser_liq,2);
+% 	max_index = size(riser_liq_Y_sorted);
+% 	temp = 0;
+% 	height = 0.1;
+% 	h_index = 1;
+%     n = 1;
+%     i = 1;
+% 	while n <= max_index(1,1)
+% 		if(riser_liq_Y_sorted(n,2) > 0.1 && riser_liq_Y_sorted(n,2) < 0.7)
+% 			if(riser_liq_Y_sorted(n,2) > height && riser_liq_Y_sorted(n,2) < height + 0.2)
+% 				if( i == 1)
+% 					temp = riser_liq_Y_sorted(n,2);
+% 					Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
+% 					Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+% 					% Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
+% 					i = i + 1;
+% 				elseif (riser_liq_Y_sorted(n,2) == temp)
+% 					Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
+% 					Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+% 					% Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
+% 					i = i + 1;
 					
-				end
-			else
-				height = height + 0.2;
-				h_index = h_index + 1;
-				i = 1;	
-				n = n-1;
-			end
+% 				end
+% 			else
+% 				height = height + 0.2;
+% 				h_index = h_index + 1;
+% 				i = 1;	
+% 				n = n-1;
+% 			end
 
-		end
+% 		end
 
-	    n = n+1;
-	end
+% 	    n = n+1;
+% 	end
 
-	n = n - 1;
-	h_index = h_index + 1;
+% 	n = n - 1;
+% 	h_index = h_index + 1;
+% 	i = 1;
+% 	temp_last = riser_liq_Y_sorted(n,2);
+% 	while n >= 1
+% 		if(riser_liq_Y_sorted(n,2) == temp_last)
+% 			Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
+% 			Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+% 			i = i + 1;
+% 		end
+% 		n = n - 1;
+% 	end
+
+% 	for h_index = 1:1:4
+% 		Local_liquid_velocity_x_sorted = sortrows(Local_liquid_velocity_x(:,:,h_index),1);
+% 		x_index = size(Local_liquid_velocity_x_sorted);
+% 		temp_sum = 0;
+% 		count = 1e-14;
+% 		i = 1;
+% 		m = -0.035;
+% 		x_i = 1;
+% 		while x_i < x_index(1,1)
+% 			if (Local_liquid_velocity_x_sorted(x_i,1) >= -0.035 && Local_liquid_velocity_x_sorted(x_i,1) <= 0.035)
+% 				if(Local_liquid_velocity_x_sorted(x_i,1) >= m && Local_liquid_velocity_x_sorted(x_i,1) < m + 0.005)
+% 					temp_sum = Local_liquid_velocity_x_sorted(x_i,2) + temp_sum;
+% 					count = count + 1;
+% 				else
+% 					Local_liquid_velocity_x_Ave(i,1,h_index,sgv_index) = m + 0.0025;
+% 					Local_liquid_velocity_x_Ave(i,2,h_index,sgv_index) = temp_sum/count;
+% 					temp_sum = 0;
+% 					count = 1;
+% 					i = i + 1;
+% 					m = m + 0.005;
+% 					x_i = x_i - 1;
+% 				end
+% 			end
+% 			x_i = x_i + 1;
+% 		end
+% 	end
+% 		% the same in the same pic
+% 	title_str = sprintf('Local superifcial velocity along X at GSV=%.2fm/s',sgv_index*0.01);
+% 	figure
+% 	plot(Local_liquid_velocity_x_Ave(:,1,1,sgv_index),Local_liquid_velocity_x_Ave(:,2,1,sgv_index),'*','linestyle','-','linewidth',1,'Color','#151f30');
+% 	hold on
+% 	plot(Local_liquid_velocity_x_Ave(:,1,2,sgv_index),Local_liquid_velocity_x_Ave(:,2,2,sgv_index),'.','linestyle','-','linewidth',1,'Color','#103778');
+% 	plot(Local_liquid_velocity_x_Ave(:,1,3,sgv_index),Local_liquid_velocity_x_Ave(:,2,3,sgv_index),'+','linestyle','-','linewidth',1,'Color','#0593a2');
+% 	plot(Local_liquid_velocity_x_Ave(:,1,4,sgv_index),Local_liquid_velocity_x_Ave(:,2,4,sgv_index),'x','linestyle','-','linewidth',1,'Color','#ff7a48');
+% 	xlabel('X(m)');
+% 	ylabel('Local superifcial velocity(m/s)');
+% 	title(title_str);
+% 	legend('height = 0.01m','height = 0.03m','height = 0.05m','height = 0.07m');
+% 	hold off
+% 	ax = gca;
+% 	ax.TickDir = 'out';	
+% end
+
+% %% the same height in the same pic
+% for h_index = 1:1:4
+% 	title_str = sprintf('Local superifcial velocity along X at height=%.1fm',(2*h_index-1)*0.1);
+% 	figure
+% 	plot(Local_liquid_velocity_x_Ave(:,1,h_index,1),Local_liquid_velocity_x_Ave(:,2,h_index,1),'*','linestyle','-','linewidth',1,'Color','#151f30');
+% 	hold on
+% 	plot(Local_liquid_velocity_x_Ave(:,1,h_index,2),Local_liquid_velocity_x_Ave(:,2,h_index,2),'.','linestyle','-','linewidth',1,'Color','#103778');
+% 	plot(Local_liquid_velocity_x_Ave(:,1,h_index,3),Local_liquid_velocity_x_Ave(:,2,h_index,3),'+','linestyle','-','linewidth',1,'Color','#0593a2');
+% 	plot(Local_liquid_velocity_x_Ave(:,1,h_index,4),Local_liquid_velocity_x_Ave(:,2,h_index,4),'x','linestyle','-','linewidth',1,'Color','#ff7a48');
+% 	xlabel('X(m)');
+% 	ylabel('Local superifcial velocity(m/s)');
+% 	title(title_str);
+% 	legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s');
+% 	hold off
+% 	ax = gca;
+% 	ax.TickDir = 'out';
+% end
+
+
+%---------------------------------------------7------------------------------------------%
+
+%% bubble size PDF 
+
+bins = categorical({'0.0114581','0.0088865858','0.0068921905','0.0053453925','0.0041457388','0.0032153205','0.0024937137','0.0019340555','0.0015'});
+for sgv_index = 1:1:4
+	title_str = sprintf('Number of bubbles with different diameters at GSV = %.2fm/s',sgv_index*0.01);
+	riser = bin3_data_GasHoldUp_Bins{3,sgv_index,1};
+	riser_Y_sorted = sortrows(riser,1);
+	max_index = size(riser_Y_sorted);
 	i = 1;
-	temp_last = riser_liq_Y_sorted(n,2);
-	while n >= 1
-		if(riser_liq_Y_sorted(n,2) == temp_last)
-			Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
-			Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+	for index = 1:1:max_index(1,1)
+		if(riser_Y_sorted(index,1) >= 0.3 && riser_Y_sorted(index,1) <= 0.7)
+			riser_Y_top(i,1) = riser_Y_sorted(index,1);
+			riser_Y_top(i,2:10) = riser_Y_sorted(index,5:13);
 			i = i + 1;
 		end
-		n = n - 1;
 	end
-
-	for h_index = 1:1:4
-		Local_liquid_velocity_x_sorted = sortrows(Local_liquid_velocity_x(:,:,h_index),1);
-		x_index = size(Local_liquid_velocity_x_sorted);
-		temp_sum = 0;
-		count = 1e-14;
-		i = 1;
-		m = -0.035;
-		x_i = 1;
-		while x_i < x_index(1,1)
-			if (Local_liquid_velocity_x_sorted(x_i,1) >= -0.035 && Local_liquid_velocity_x_sorted(x_i,1) <= 0.035)
-				if(Local_liquid_velocity_x_sorted(x_i,1) >= m && Local_liquid_velocity_x_sorted(x_i,1) < m + 0.005)
-					temp_sum = Local_liquid_velocity_x_sorted(x_i,2) + temp_sum;
-					count = count + 1;
-				else
-					Local_liquid_velocity_x_Ave(i,1,h_index,sgv_index) = m + 0.0025;
-					Local_liquid_velocity_x_Ave(i,2,h_index,sgv_index) = temp_sum/count;
-					temp_sum = 0;
-					count = 1;
-					i = i + 1;
-					m = m + 0.005;
-					x_i = x_i - 1;
-				end
-			end
-			x_i = x_i + 1;
-		end
+	n = 1;
+	for bin_index = 1:1:9
+		bin_sum(n,1) = sum(riser_Y_top(:,bin_index+1));
+		n = n+1;
 	end
-		% the same in the same pic
-	title_str = sprintf('Local superifcial velocity along X at GSV=%.2fm/s',sgv_index*0.01);
-	figure
-	plot(Local_liquid_velocity_x_Ave(:,1,1,sgv_index),Local_liquid_velocity_x_Ave(:,2,1,sgv_index),'*','linestyle','-','linewidth',1,'Color','#151f30');
-	hold on
-	plot(Local_liquid_velocity_x_Ave(:,1,2,sgv_index),Local_liquid_velocity_x_Ave(:,2,2,sgv_index),'.','linestyle','-','linewidth',1,'Color','#103778');
-	plot(Local_liquid_velocity_x_Ave(:,1,3,sgv_index),Local_liquid_velocity_x_Ave(:,2,3,sgv_index),'+','linestyle','-','linewidth',1,'Color','#0593a2');
-	plot(Local_liquid_velocity_x_Ave(:,1,4,sgv_index),Local_liquid_velocity_x_Ave(:,2,4,sgv_index),'x','linestyle','-','linewidth',1,'Color','#ff7a48');
-	xlabel('X(m)');
-	ylabel('Local superifcial velocity(m/s)');
-	title(title_str);
-	legend('height = 0.01m','height = 0.03m','height = 0.05m','height = 0.07m');
-	hold off
-	ax = gca;
-	ax.TickDir = 'out';	
-end
-
-%% the same height in the same pic
-for h_index = 1:1:4
-	title_str = sprintf('Local superifcial velocity along X at height=%.1fm',(2*h_index-1)*0.1);
-	figure
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,1),Local_liquid_velocity_x_Ave(:,2,h_index,1),'*','linestyle','-','linewidth',1,'Color','#151f30');
-	hold on
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,2),Local_liquid_velocity_x_Ave(:,2,h_index,2),'.','linestyle','-','linewidth',1,'Color','#103778');
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,3),Local_liquid_velocity_x_Ave(:,2,h_index,3),'+','linestyle','-','linewidth',1,'Color','#0593a2');
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,4),Local_liquid_velocity_x_Ave(:,2,h_index,4),'x','linestyle','-','linewidth',1,'Color','#ff7a48');
-	xlabel('X(m)');
-	ylabel('Local superifcial velocity(m/s)');
-	title(title_str);
-	legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s');
-	hold off
-	ax = gca;
-	ax.TickDir = 'out';
+figure
+bar(bins,bin_sum(:,1),'facecolor','#0593a2');
+xlabel('Bubble Diameter(m)');
+ylabel('Bubble Number');
+title(title_str);
+ylim([0,7000]);
 end
