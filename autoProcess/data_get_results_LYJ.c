@@ -1,5 +1,7 @@
+#include"stdio.h"
 #include"udf.h"
 #include"sg_pb.h"
+
 
 DEFINE_ON_DEMAND(data_get)
 {
@@ -10,6 +12,7 @@ DEFINE_ON_DEMAND(data_get)
 	real dia_gas_riser, volume_fraction_gas_riser,cell_volume_riser;
 	real dia_gas_downcomer, volume_fraction_gas_downcomer, cell_volume_downcomer;
 	real time,tt;
+	real cell_volume_liq_riser,cell_volume_liq_downcomer;
 
 	int i,j;
 
@@ -95,8 +98,9 @@ DEFINE_ON_DEMAND(data_get)
 					velocity_u = C_U(c,t);
 					velocity_v = C_V(c,t);
 					velocity_w = C_W(c,t);
+					cell_volume_liq_riser = C_VOLUME(c, t);
 					velocity = sqrt(velocity_w*velocity_w + velocity_v*velocity_v + velocity_u*velocity_u);
-					fprintf(f_RISER_liq,"%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e, \n",x[0],x[1],x[2],v,vof_liq,epsilon,velocity);
+					fprintf(f_RISER_liq,"%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e, \n",x[0],x[1],x[2],v,vof_liq,epsilon,velocity,cell_volume_liq_riser);
 				}
 				else
 				{
@@ -108,8 +112,9 @@ DEFINE_ON_DEMAND(data_get)
 					velocity_u = C_U(c,t);
 					velocity_v = C_V(c,t);
 					velocity_w = C_W(c,t);
+					cell_volume_liq_downcomer = C_VOLUME(c, t); 
 					velocity = sqrt(velocity_w*velocity_w + velocity_v*velocity_v + velocity_u*velocity_u);
-					fprintf(f_DOWNCOMER_liq, "%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e, \n", x[0], x[1], x[2], v, vof_liq, epsilon, velocity);
+					fprintf(f_DOWNCOMER_liq, "%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e,%15.5e, \n", x[0], x[1], x[2], v, vof_liq, epsilon, velocity, cell_volume_liq_downcomer);
 				}
 			}
 		}
@@ -136,13 +141,13 @@ Y |volume_fraction_gas_downcomer | cell_volume_downcomer   | X | Z | vof_gas|
 
 riser_liq:
 
-1 | 2 | 3 | 4 |    5    |    6    |       7     | 8 |
-X | Y | Z | v | vof_liq | epsilon |   velocity  |   |
+1 | 2 | 3 | 4 |    5    |    6    |       7     |           8            |
+X | Y | Z | v | vof_liq | epsilon |   velocity  | cell_volume_liq_riser  |
   
 downcomer_liq:  
   
-1 | 2 | 3 | 4 |    5    |    6    |       7     | 8 |
-X | Y | Z | v | vof_liq | epsilon |   velocity  |   |
+1 | 2 | 3 | 4 |    5    |    6    |       7     |               8            |
+X | Y | Z | v | vof_liq | epsilon |   velocity  | cell_volume_liq_downcomer  |
 
 
 */
