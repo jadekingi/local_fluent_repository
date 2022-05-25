@@ -1,6 +1,5 @@
 /file/set-tui-version "19.2"
 (cx-gui-do cx-activate-item "MenuBar*ReadSubMenu*Data...")
-(cx-gui-do cx-activate-item "Question*OK")
 (cx-gui-do cx-set-file-dialog-entries "Select File" '( "J:/RESULTS/bin3_0.01_results/AUTOSAVE0425_0.01-4-30000.dat") "Data Files (*.dat*)")
 (cx-gui-do cx-activate-item "Ribbon*Frame1*Frame4(User Defined)*Table1*Table3(User Defined)*PushButton1(Functions)")
 (cx-gui-do cx-activate-item "MenuBar*PopupMenuFunctions*Manage...")
