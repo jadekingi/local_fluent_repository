@@ -1,0 +1,27 @@
+
+//C 代码
+//查询字符串中的单词并输出其个数
+
+while (1)
+	{
+		//清除前导的非字母和数字字符
+		while (*pbuf && !isalnum(*pbuf))
+			++pbuf;
+
+		//如果到了字符串末尾就退出循环
+		if (*pbuf == 0)
+			break;
+
+		i = 0;
+		do {
+			word[i] = *pbuf;//将读取到的字母或数字字符赋给word
+			++pbuf;//将指针指向下一个字符处
+			++i;
+		} while (*pbuf&&isalnum(*pbuf));
+		word[i] = '\0';//添加字符串结束
+		printf("%-30s", word);//在屏幕上打印出该单词
+		++count;
+		if (count % 2 == 0)//每一行只打印两个单词
+			printf("\n");
+	}
+	printf("\n共有%d单词。\n", count);

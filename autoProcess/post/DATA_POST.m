@@ -122,7 +122,7 @@ various_bins_liq{5,2} = bin5_data_liq{1,4,2};
 
 filename_index = 1;
 
-%---------------------------------------1-----------------------------------------------%
+%% ---------------------------------------1-----------------------------------------------%
 
 %    Overall_GasHoldUp_Average
 
@@ -160,15 +160,22 @@ for sgv_index = 1:1:4
 
 end
 
+
+
+
 writematrix(theSGV_GH_Ave,'./results_post/theSGV_GH_Ave.txt');
 sgv = [0.01,0.02,0.03,0.04];
+GH_difference(:,1) = sgv;
+GH_difference(:,2) = theSGV_GH_Ave(:,1)-theSGV_GH_Ave(:,2);
 figure
-plot(sgv,theSGV_GH_Ave(:,1),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-xlabel('Gas superficial velocity(m/s)');
-ylabel('Overall Gas Holdup(-)');
-title('Overall gas holdup');
+plot(sgv,theSGV_GH_Ave(:,1),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+xlabel('Gas superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('Overall Gas Holdup(-)','fontsize',18,'fontname','times new roman');
+xlim([0.0075 0.0425]);
+title('Overall gas holdup with GSV','fontsize',18,'fontname','times new roman');
 hold on
-plot(sgv,theSGV_GH_Ave(:,2),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(sgv,theSGV_GH_Ave(:,2),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+ylim([-0.02,0.25]);
 legend('Riser','Downcomer','location','best');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
@@ -187,7 +194,30 @@ saveas(gcf,filename_png_str);
 savefig(filename_str);
 filename_index = filename_index + 1;
 
-% --------------------------------------------------2-----------------------------------------------------------------------------------------%
+figure
+plot(GH_difference(:,1),GH_difference(:,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+xlabel('Gas superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('Overall Gas Holdup Difference(-)','fontsize',18,'fontname','times new roman');
+title('Overall gas holdup difference with GSV','fontsize',18,'fontname','times new roman');
+xlim([0.005 0.045]);
+box off
+ax2 = axes('Position',get(gca,'Position'),...
+           'XAxisLocation','top',...
+           'YAxisLocation','right',...
+           'Color','none',...
+           'XColor','k','YColor','k');
+set(ax2,'YTick', []);
+set(ax2,'XTick', []);
+box on
+set(gca,'linewidth',1.5);
+hold off
+filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
+filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
+saveas(gcf,filename_png_str);
+savefig(filename_str);
+filename_index = filename_index + 1;
+
+%%  --------------------------------------------------2-----------------------------------------------------------------------------------------%
 
 %Local_GasHoldUp_with_Height
 
@@ -218,15 +248,16 @@ for sgv_index = 1:1:4
 end
 writematrix(Local_GasHoldUp,'./results_post/Local_GasHoldUp.txt');
 figure
-scatter(Local_GasHoldUp(:,1,1),Local_GasHoldUp(:,2,1),15,'filled','MarkerFaceColor','#151f30');
-xlabel('Height(m)');
-ylabel('Local Gas HoldUp(-)');
-title('Local Gas HoldUp with Increasing Height');
+scatter(Local_GasHoldUp(:,1,1),Local_GasHoldUp(:,2,1),30,'filled','o','MarkerFaceColor','#005ead');
+xlabel('Height(m)','fontsize',18,'fontname','times new roman');
+ylabel('Local Gas HoldUp(-)','fontsize',18,'fontname','times new roman');
+xlim([0.05,0.75]);
+title('Local Gas HoldUp with Increasing Height','fontsize',18,'fontname','times new roman');
 ylim([-0.05,0.35]);
 hold on
-scatter(Local_GasHoldUp(:,1,2),Local_GasHoldUp(:,2,2),15,'filled','MarkerFaceColor','#103778');
-scatter(Local_GasHoldUp(:,1,3),Local_GasHoldUp(:,2,3),15,'filled','MarkerFaceColor','#0593a2');
-scatter(Local_GasHoldUp(:,1,4),Local_GasHoldUp(:,2,4),15,'filled','MarkerFaceColor','#ff7a48');
+scatter(Local_GasHoldUp(:,1,2),Local_GasHoldUp(:,2,2),30,'filled','s','MarkerFaceColor','#e22c90');
+scatter(Local_GasHoldUp(:,1,3),Local_GasHoldUp(:,2,3),30,'filled','^','MarkerFaceColor','#fe8006');
+scatter(Local_GasHoldUp(:,1,4),Local_GasHoldUp(:,2,4),30,'filled','v','MarkerFaceColor','#05b9c7');
 legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
@@ -246,7 +277,7 @@ savefig(filename_str);
 filename_index = filename_index + 1;
 
 
-% ---------------------------------------------3----------------------------------------------------%
+%% ---------------------------------------------3----------------------------------------------------%
 
 
 % Local_GasHoldUp_with_X
@@ -314,7 +345,7 @@ for h_index = 1:1:4
 	i = 1;
 	m = -0.035;
 	x_i = 1;
-	while x_i < x_index(1,1)
+	while x_i <= x_index(1,1)
 		if(Local_GasHoldUp_X_sorted(x_i,1) >= m && Local_GasHoldUp_X_sorted(x_i,1) < m+0.005)
 			F_sum = Local_GasHoldUp_X_sorted(x_i,2)*Local_GasHoldUp_X_sorted(x_i,3) + F_sum;
 			V_sum = Local_GasHoldUp_X_sorted(x_i,3) + V_sum;
@@ -329,20 +360,22 @@ for h_index = 1:1:4
 		end
 	x_i = x_i + 1;
 	end
+	X_Ave_localGasHoldup(i,1,h_index) = m+0.0025;
+	X_Ave_localGasHoldup(i,2,h_index) = F_sum/V_sum;
 end
 
 datafilename_str = sprintf('./results_post/X_Ave_localGasHoldup_GSV_%.2fm_per_s.txt',sgv_index*0.01);
 writematrix(X_Ave_localGasHoldup,datafilename_str);
 str = sprintf('Local Gas Holdup along X, GSV = %.2f m/s',sgv_index*0.01);
 figure
-plot(X_Ave_localGasHoldup(:,1,1),X_Ave_localGasHoldup(:,2,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(X_Ave_localGasHoldup(:,1,1),X_Ave_localGasHoldup(:,2,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
 hold on
-plot(X_Ave_localGasHoldup(:,1,2),X_Ave_localGasHoldup(:,2,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-plot(X_Ave_localGasHoldup(:,1,3),X_Ave_localGasHoldup(:,2,3),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-plot(X_Ave_localGasHoldup(:,1,4),X_Ave_localGasHoldup(:,2,4),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-xlabel('X(m)');
-ylabel('Local Gas Holdup(-)');
-title(str);
+plot(X_Ave_localGasHoldup(:,1,2),X_Ave_localGasHoldup(:,2,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+plot(X_Ave_localGasHoldup(:,1,3),X_Ave_localGasHoldup(:,2,3),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006');
+plot(X_Ave_localGasHoldup(:,1,4),X_Ave_localGasHoldup(:,2,4),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7');
+xlabel('X(m)','fontsize',18,'fontname','times new roman');
+ylabel('Local Gas Holdup(-)','fontsize',18,'fontname','times new roman');
+title(str,'fontsize',18,'fontname','times new roman');
 ylim([-0.05,0.35])
 legend('height = 0.1m','height = 0.3m','height = 0.5m','height = 0.7m','location','best');
 box off
@@ -382,12 +415,12 @@ for rd_index = 1:1:2
 	end
 end
 figure
-plot(liq_mean_v(:,1,1),liq_mean_v(:,2,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(liq_mean_v(:,1,1),liq_mean_v(:,2,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
 hold on
-plot(liq_mean_v(:,1,2),liq_mean_v(:,2,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-xlabel('Gas superficial velocity(m/s)');
-ylabel('Liquid circulation velocity(m/s)');
-title('Overall liquid circulation velocity');
+plot(liq_mean_v(:,1,2),liq_mean_v(:,2,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+xlabel('Gas superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('Liquid circulation velocity(m/s)','fontsize',18,'fontname','times new roman');
+title('Overall liquid circulation velocity','fontsize',18,'fontname','times new roman');
 ylim([0.15,0.40]);
 legend('Riser','Downcomer','location','best');
 box off
@@ -409,7 +442,7 @@ filename_index = filename_index + 1;
 
 
 %--------------------------------------------------5---------------------------------------------------------%
-% Local_liquid_velocity along Y
+%% Local_liquid_velocity along Y
 
 
 for sgv_index = 1:1:4
@@ -440,15 +473,15 @@ for n = 1:1:4
 end
 
 figure
-plot(Local_liquid_velocity_Y(:,1,1),Local_liquid_velocity_Y(:,2,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(Local_liquid_velocity_Y(:,1,1),Local_liquid_velocity_Y(:,2,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead','markerindices',1:2:length(Local_liquid_velocity_Y(:,2,1)));
 hold on
-plot(Local_liquid_velocity_Y(:,1,2),Local_liquid_velocity_Y(:,2,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-plot(Local_liquid_velocity_Y(:,1,3),Local_liquid_velocity_Y(:,2,3),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-plot(Local_liquid_velocity_Y(:,1,4),Local_liquid_velocity_Y(:,2,4),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-xlabel('Height(m)');
-ylabel('Local liquid circulation velocity(m/s)');
-title('Local liquid circulation velocity along Y(height)');
-xlim([0.1 0.7]);
+plot(Local_liquid_velocity_Y(:,1,2),Local_liquid_velocity_Y(:,2,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90','markerindices',1:2:length(Local_liquid_velocity_Y(:,2,2)));
+plot(Local_liquid_velocity_Y(:,1,3),Local_liquid_velocity_Y(:,2,3),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006','markerindices',1:2:length(Local_liquid_velocity_Y(:,2,3)));
+plot(Local_liquid_velocity_Y(:,1,4),Local_liquid_velocity_Y(:,2,4),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7','markerindices',1:2:length(Local_liquid_velocity_Y(:,2,4)));
+xlabel('Height(m)','fontsize',18,'fontname','times new roman');
+ylabel('Local liquid circulation velocity(m/s)','fontsize',18,'fontname','times new roman');
+title('Local liquid circulation velocity along Y(height)','fontsize',18,'fontname','times new roman');
+xlim([0.075 0.725]);
 legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
@@ -468,159 +501,164 @@ savefig(filename_str);
 filename_index = filename_index + 1;
 
 
-% --------------------------------------------------6---------------------------------------------------------%
+%% --------------------------------------------------6---------------------------------------------------------%
 %Local_liquid_velocity along X
 
+
 for sgv_index = 1:1:4
-	riser_liq = bin3_data_liq{3,sgv_index,1};
-	riser_liq_Y_sorted = sortrows(riser_liq,2);
-	max_index = size(riser_liq_Y_sorted);
-	temp = 0;
-	height = 0.1;
-	h_index = 1;
+    riser_liq = bin3_data_liq{3,sgv_index,1};
+    riser_liq_Y_sorted = sortrows(riser_liq,2);
+    max_index = size(riser_liq_Y_sorted);
+    temp = 0;
+    height = 0.1;
+    h_index = 1;
     n = 1;
     i = 1;
-	while n <= max_index(1,1)
-		if(riser_liq_Y_sorted(n,2) > 0.1 && riser_liq_Y_sorted(n,2) < 0.7)
-			if(riser_liq_Y_sorted(n,2) > height && riser_liq_Y_sorted(n,2) < height + 0.2)
-				if( i == 1)
-					temp = riser_liq_Y_sorted(n,2);
-					Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
-					Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
-					% Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
-					i = i + 1;
-				elseif (riser_liq_Y_sorted(n,2) == temp)
-					Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
-					Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
-					% Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
-					i = i + 1;
-					
-				end
-			else
-				height = height + 0.2;
-				h_index = h_index + 1;
-				i = 1;	
-				n = n-1;
-			end
+    while n <= max_index(1,1)
+        if(riser_liq_Y_sorted(n,2) > 0.1 && riser_liq_Y_sorted(n,2) < 0.7)
+            if(riser_liq_Y_sorted(n,2) > height && riser_liq_Y_sorted(n,2) < height + 0.2)
+                if( i == 1)
+                    temp = riser_liq_Y_sorted(n,2);
+                    Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
+                    Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+                    Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,8);
+                    % Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
+                    i = i + 1;
+                elseif (riser_liq_Y_sorted(n,2) == temp)
+                    Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
+                    Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+                    Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,8);
+                    % Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,2);%for debug
+                    i = i + 1;
+                    
+                end
+            else
+                height = height + 0.2;
+                h_index = h_index + 1;
+                i = 1;  
+                n = n-1;
+            end
 
-		end
+        end
 
-	    n = n+1;
-	end
+        n = n+1;
+    end
 
-	n = n - 1;
-	h_index = h_index + 1;
-	i = 1;
-	temp_last = riser_liq_Y_sorted(n,2);
-	while n >= 1
-		if(riser_liq_Y_sorted(n,2) == temp_last)
-			Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
-			Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
-			i = i + 1;
-		end
-		n = n - 1;
-	end
+    n = n - 1;
+    h_index = h_index + 1;
+    i = 1;
+    temp_last = riser_liq_Y_sorted(n,2);
+    while n >= 1
+        if(riser_liq_Y_sorted(n,2) == temp_last)
+            Local_liquid_velocity_x(i,1,h_index) = riser_liq_Y_sorted(n,1);
+            Local_liquid_velocity_x(i,2,h_index) = riser_liq_Y_sorted(n,7);
+            Local_liquid_velocity_x(i,3,h_index) = riser_liq_Y_sorted(n,8);
+            i = i + 1;
+        end
+        n = n - 1;
+    end
 
-	for h_index = 1:1:4
-		Local_liquid_velocity_x_sorted = sortrows(Local_liquid_velocity_x(:,:,h_index),1);
-		x_index = size(Local_liquid_velocity_x_sorted);
-		temp_sum = 0;
-		count = 1e-14;
-		i = 1;
-		m = -0.035;
-		x_i = 1;
-		while x_i < x_index(1,1)
-			if (Local_liquid_velocity_x_sorted(x_i,1) >= -0.035 && Local_liquid_velocity_x_sorted(x_i,1) <= 0.035)
-				if(Local_liquid_velocity_x_sorted(x_i,1) >= m && Local_liquid_velocity_x_sorted(x_i,1) < m + 0.005)
-					temp_sum = Local_liquid_velocity_x_sorted(x_i,2) + temp_sum;
-					count = count + 1;
-				else
-					Local_liquid_velocity_x_Ave(i,1,h_index,sgv_index) = m + 0.0025;
-					Local_liquid_velocity_x_Ave(i,2,h_index,sgv_index) = temp_sum/count;
-					temp_sum = 0;
-					count = 1;
-					i = i + 1;
-					m = m + 0.005;
-					x_i = x_i - 1;
-				end
-			end
-			x_i = x_i + 1;
-		end
-	end
-		% the same in the same pic
-	title_str = sprintf('Local liquid circulation velocity along X at GSV=%.2fm/s',sgv_index*0.01);
-	figure
-	plot(Local_liquid_velocity_x_Ave(:,1,1,sgv_index),Local_liquid_velocity_x_Ave(:,2,1,sgv_index),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-	hold on
-	plot(Local_liquid_velocity_x_Ave(:,1,2,sgv_index),Local_liquid_velocity_x_Ave(:,2,2,sgv_index),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-	plot(Local_liquid_velocity_x_Ave(:,1,3,sgv_index),Local_liquid_velocity_x_Ave(:,2,3,sgv_index),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-	plot(Local_liquid_velocity_x_Ave(:,1,4,sgv_index),Local_liquid_velocity_x_Ave(:,2,4,sgv_index),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-	xlabel('X(m)');
-	ylabel('Local liquid circulation velocity(m/s)');
-	title(title_str);
-	ylim([-0.05,0.8]);
-	legend('height = 0.1m','height = 0.3m','height = 0.5m','height = 0.7m','location','best');
-	box off
-	ax2 = axes('Position',get(gca,'Position'),...
-	           'XAxisLocation','top',...
-	           'YAxisLocation','right',...
-	           'Color','none',...
-	           'XColor','k','YColor','k');
-	set(ax2,'YTick', []);
-	set(ax2,'XTick', []);
-	box on
-	set(gca,'linewidth',1.5);
-	hold off
-	ax = gca;
-	ax.TickDir = 'out';	
-	filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
-	filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
-	saveas(gcf,filename_png_str);
-	savefig(filename_str);
-	filename_index = filename_index + 1;
+    for h_index = 1:1:4
+        Local_liquid_velocity_x_sorted = sortrows(Local_liquid_velocity_x(:,:,h_index),1);
+        x_index = size(Local_liquid_velocity_x_sorted);
+        temp_sum = 0;
+        volume_liq_sum = 1e-14;
+        i = 1;
+        m = -0.035;
+        x_i = 1;
+        while x_i <= x_index(1,1)
+            if (Local_liquid_velocity_x_sorted(x_i,1) >= -0.035 && Local_liquid_velocity_x_sorted(x_i,1) <= 0.035)
+                if(Local_liquid_velocity_x_sorted(x_i,1) >= m && Local_liquid_velocity_x_sorted(x_i,1) < m + 0.005)
+                    temp_sum = Local_liquid_velocity_x_sorted(x_i,2)*Local_liquid_velocity_x_sorted(x_i,3) + temp_sum;
+                    volume_liq_sum = volume_liq_sum + Local_liquid_velocity_x_sorted(x_i,3);
+                else
+                    Local_liquid_velocity_x_Ave(i,1,h_index,sgv_index) = m + 0.0025;
+                    Local_liquid_velocity_x_Ave(i,2,h_index,sgv_index) = temp_sum/volume_liq_sum;
+                    temp_sum = 0;
+                    volume_liq_sum = 1e-14;
+                    i = i + 1;
+                    m = m + 0.005;
+                    x_i = x_i - 1;
+                end
+            end
+            x_i = x_i + 1;
+        end
+        Local_liquid_velocity_x_Ave(i,1,h_index,sgv_index) = m + 0.0025;
+        Local_liquid_velocity_x_Ave(i,2,h_index,sgv_index) = temp_sum/volume_liq_sum;
+    end
+        % the same in the same pic
+    title_str = sprintf('Local liquid circulation velocity along X at GSV=%.2fm/s',sgv_index*0.01);
+    figure
+    plot(Local_liquid_velocity_x_Ave(:,1,1,sgv_index),Local_liquid_velocity_x_Ave(:,2,1,sgv_index),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+    hold on
+    plot(Local_liquid_velocity_x_Ave(:,1,2,sgv_index),Local_liquid_velocity_x_Ave(:,2,2,sgv_index),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+    plot(Local_liquid_velocity_x_Ave(:,1,3,sgv_index),Local_liquid_velocity_x_Ave(:,2,3,sgv_index),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006');
+    plot(Local_liquid_velocity_x_Ave(:,1,4,sgv_index),Local_liquid_velocity_x_Ave(:,2,4,sgv_index),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7');
+    xlabel('X(m)','fontsize',18,'fontname','times new roman');
+    ylabel('Local liquid circulation velocity(m/s)','fontsize',18,'fontname','times new roman');
+    title(title_str,'fontsize',18,'fontname','times new roman');
+    ylim([-0.05,0.8]);
+    legend('height = 0.1m','height = 0.3m','height = 0.5m','height = 0.7m','location','best');
+    % box off
+    % ax2 = axes('Position',get(gca,'Position'),...
+    %            'XAxisLocation','top',...
+    %            'YAxisLocation','right',...
+    %            'Color','none',...
+    %            'XColor','k','YColor','k');
+    % set(ax2,'YTick', []);
+    % set(ax2,'XTick', []);
+    % box on
+    set(gca,'linewidth',1.5);
+    hold off
+    filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
+    filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
+    saveas(gcf,filename_png_str);
+    savefig(filename_str);
+    filename_index = filename_index + 1;
 
 end
 
 % %% the same height in the same pic
 for h_index = 1:1:4
-	title_str = sprintf('Local liquid circulation velocity along X at height=%.1fm',(2*h_index-1)*0.1);
-	figure
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,1),Local_liquid_velocity_x_Ave(:,2,h_index,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-	hold on
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,2),Local_liquid_velocity_x_Ave(:,2,h_index,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,3),Local_liquid_velocity_x_Ave(:,2,h_index,3),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-	plot(Local_liquid_velocity_x_Ave(:,1,h_index,4),Local_liquid_velocity_x_Ave(:,2,h_index,4),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-	xlabel('X(m)');
-	ylabel('Local liquid circulation velocity(m/s)');
-	title(title_str);
-	ylim([-0.05,0.8]);
-	legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
-	box off
-	ax2 = axes('Position',get(gca,'Position'),...
-	           'XAxisLocation','top',...
-	           'YAxisLocation','right',...
-	           'Color','none',...
-	           'XColor','k','YColor','k');
-	set(ax2,'YTick', []);
-	set(ax2,'XTick', []);
-	box on
-	set(gca,'linewidth',1.5);
-	hold off
-	ax = gca;
-	ax.TickDir = 'out';
-	filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
-	filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
-	saveas(gcf,filename_png_str);
-	savefig(filename_str);
-	filename_index = filename_index + 1;
+    title_str = sprintf('Local liquid circulation velocity along X at height=%.1fm',(2*h_index-1)*0.1);
+    figure
+    plot(Local_liquid_velocity_x_Ave(:,1,h_index,1),Local_liquid_velocity_x_Ave(:,2,h_index,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+    hold on
+    plot(Local_liquid_velocity_x_Ave(:,1,h_index,2),Local_liquid_velocity_x_Ave(:,2,h_index,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+    plot(Local_liquid_velocity_x_Ave(:,1,h_index,3),Local_liquid_velocity_x_Ave(:,2,h_index,3),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006');
+    plot(Local_liquid_velocity_x_Ave(:,1,h_index,4),Local_liquid_velocity_x_Ave(:,2,h_index,4),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7');
+    xlabel('X(m)','fontsize',18,'fontname','times new roman');
+    ylabel('Local liquid circulation velocity(m/s)','fontsize',18,'fontname','times new roman');
+    title(title_str,'fontsize',18,'fontname','times new roman');
+    ylim([-0.05,0.8]);
+    legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
+    % box off
+    % ax2 = axes('Position',get(gca,'Position'),...
+    %            'XAxisLocation','top',...
+    %            'YAxisLocation','right',...
+    %            'Color','none',...
+    %            'XColor','k','YColor','k');
+    % set(ax2,'YTick', []);
+    % set(ax2,'XTick', []);
+    % box on
+    set(gca,'linewidth',1.5);
+    set(gca,'linewidth',1.5);
+    hold off
+    filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
+    filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
+    saveas(gcf,filename_png_str);
+    savefig(filename_str);
+    filename_index = filename_index + 1;
 end
+
 
 
 %---------------------------------------------7------------------------------------------%
 
 %% bubble size PDF 
 g = 1;
-bins = categorical({'0.0114581','0.0088865858','0.0068921905','0.0053453925','0.0041457388','0.0032153205','0.0024937137','0.0019340555','0.0015'});
+bins = categorical({'11.5','8.89','6.89','5.35','4.15','3.22','2.49','1.93','1.5'});
+bins = reordercats(bins,{'11.5','8.89','6.89','5.35','4.15','3.22','2.49','1.93','1.5'});
 for sgv_index = 1:1:4
 	title_str = sprintf('Bubbles Fraction at GSV = %.2fm/s',sgv_index*0.01);
 	riser = bin3_data_GasHoldUp_Bins{3,sgv_index,1};
@@ -628,7 +666,7 @@ for sgv_index = 1:1:4
 	max_index = size(riser_Y_sorted);
 	i = 1;
 	for index = 1:1:max_index(1,1)
-		if(riser_Y_sorted(index,1) >= 0.1 && riser_Y_sorted(index,1) <= 0.7)
+		if(riser_Y_sorted(index,1) >= 0.3 && riser_Y_sorted(index,1) <= 0.7)
 			riser_Y_top(i,1) = riser_Y_sorted(index,1);
 			riser_Y_top(i,11) = riser_Y_sorted(index,3);
 			for j = 2:1:10
@@ -646,11 +684,10 @@ for sgv_index = 1:1:4
 	small_bubble_fraction_withsgv(g,2) = sum(bin_sum(2:9,1))/sum(bin_sum(:,1));
 	g = g + 1;
 figure
-bar(bins,bin_sum(:,1),'facecolor','#0593a2','edgecolor','#0593a2');
-xlabel('Bubble Diameter (m)');
-ylabel('Bubble Fraction (-)');
-title(title_str);
-ylim([0,0.25]);
+bar(bins,bin_sum(:,1),'facecolor','#fe8006','edgecolor','#fe8006');
+xlabel('Bubble Diameter (mm)','fontsize',18,'fontname','times new roman');
+ylabel('Bubble Fraction (-)','fontsize',18,'fontname','times new roman');
+title(title_str,'fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -669,10 +706,11 @@ filename_index = filename_index + 1;
 end
 
 figure
-plot(small_bubble_fraction_withsgv(:,1),small_bubble_fraction_withsgv(:,2),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('GSV(m/s)');
-ylabel('Small Bubble Fraction');
-title('Small Bubble Fraction with GSV');
+plot(small_bubble_fraction_withsgv(:,1),small_bubble_fraction_withsgv(:,2),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('GSV(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('Small Bubble Fraction','fontsize',18,'fontname','times new roman');
+xlim([0.0075 0.0425]);
+title('Small Bubble Fraction with GSV','fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -769,10 +807,11 @@ for sgv_index = 1:1:4
 end
 
 figure
-plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,2),'s','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Gas Superficial velocity(m/s)');
-ylabel('\it k_L \rm(m/s)');
-title('k_L with GSV in riser');
+plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,2),'s','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Gas Superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('\it k_L \rm(m/s)','fontsize',18,'fontname','times new roman');
+title('\it k_L \rmwith GSV in riser','fontsize',18,'fontname','times new roman');
+xlim([0.0075 0.0425]);
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -790,32 +829,10 @@ savefig(filename_str);
 filename_index = filename_index + 1;
 
 figure
-plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,5),'s','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Gas Superficial velocity(m/s)');
-ylabel('Re');
-title('Re with GSV in riser');
-box off
-ax2 = axes('Position',get(gca,'Position'),...
-           'XAxisLocation','top',...
-           'YAxisLocation','right',...
-           'Color','none',...
-           'XColor','k','YColor','k');
-set(ax2,'YTick', []);
-set(ax2,'XTick', []);
-box on
-set(gca,'linewidth',1.5);
-filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
-filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
-saveas(gcf,filename_png_str);
-savefig(filename_str);
-filename_index = filename_index + 1;
-
-
-figure
-plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,3),'s','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Gas Superficial velocity(m/s)');
-ylabel('\itk_La \rm(s^{-1})');
-title('k_La with GSV in riser');
+plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,5),'s','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Gas Superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('Re','fontsize',18,'fontname','times new roman');
+title('Re with GSV in riser','fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -834,10 +851,11 @@ filename_index = filename_index + 1;
 
 
 figure
-plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,4),'s','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Gas Superficial velocity(m/s)');
-ylabel('a(m^2/m^3)');
-title('a with GSV in riser');
+plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,3),'s','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Gas Superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('\itk_La \rm(s^{-1})','fontsize',18,'fontname','times new roman');
+xlim([0.0075 0.0425]);
+title('\itk_La\rm with GSV in riser','fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -856,14 +874,36 @@ filename_index = filename_index + 1;
 
 
 figure
-plot(riser_kl_kla_Y_results(:,1,1),riser_kl_kla_Y_results(:,2,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(riser_kl_kla_ave(:,1),riser_kl_kla_ave(:,4),'s','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Gas Superficial velocity(m/s)','fontsize',18,'fontname','times new roman');
+ylabel('a(m^2/m^3)','fontsize',18,'fontname','times new roman');
+title('a with GSV in riser','fontsize',18,'fontname','times new roman');
+box off
+ax2 = axes('Position',get(gca,'Position'),...
+           'XAxisLocation','top',...
+           'YAxisLocation','right',...
+           'Color','none',...
+           'XColor','k','YColor','k');
+set(ax2,'YTick', []);
+set(ax2,'XTick', []);
+box on
+set(gca,'linewidth',1.5);
+filename_str = sprintf('J:/RESULTS/results_fig/%d.fig',filename_index);
+filename_png_str = sprintf('J:/RESULTS/results_fig_png/%d.png',filename_index);
+saveas(gcf,filename_png_str);
+savefig(filename_str);
+filename_index = filename_index + 1;
+
+
+figure
+plot(riser_kl_kla_Y_results(:,1,1),riser_kl_kla_Y_results(:,2,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
 hold on
-plot(riser_kl_kla_Y_results(:,1,2),riser_kl_kla_Y_results(:,2,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-plot(riser_kl_kla_Y_results(:,1,3),riser_kl_kla_Y_results(:,2,3),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-plot(riser_kl_kla_Y_results(:,1,4),riser_kl_kla_Y_results(:,2,4),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-xlabel('height(m)');
-ylabel('\itk_L\rm(m/s)');
-title('k_L with height in riser');
+plot(riser_kl_kla_Y_results(:,1,2),riser_kl_kla_Y_results(:,2,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+plot(riser_kl_kla_Y_results(:,1,3),riser_kl_kla_Y_results(:,2,3),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006');
+plot(riser_kl_kla_Y_results(:,1,4),riser_kl_kla_Y_results(:,2,4),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7');
+xlabel('height(m)','fontsize',18,'fontname','times new roman');
+ylabel('\itk_L\rm(m/s)','fontsize',18,'fontname','times new roman');
+title('k_L with height in riser','fontsize',18,'fontname','times new roman');
 legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
 hold off
 box off
@@ -885,14 +925,14 @@ filename_index = filename_index + 1;
 
 
 figure
-plot(riser_kl_kla_Y_results(:,1,1),riser_kl_kla_Y_results(:,3,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(riser_kl_kla_Y_results(:,1,1),riser_kl_kla_Y_results(:,3,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
 hold on
-plot(riser_kl_kla_Y_results(:,1,2),riser_kl_kla_Y_results(:,3,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-plot(riser_kl_kla_Y_results(:,1,3),riser_kl_kla_Y_results(:,3,3),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-plot(riser_kl_kla_Y_results(:,1,4),riser_kl_kla_Y_results(:,3,4),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-xlabel('height(m)');
-ylabel('\itk_La\rm(s^{-1})');
-title('k_La with height in riser');
+plot(riser_kl_kla_Y_results(:,1,2),riser_kl_kla_Y_results(:,3,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+plot(riser_kl_kla_Y_results(:,1,3),riser_kl_kla_Y_results(:,3,3),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006');
+plot(riser_kl_kla_Y_results(:,1,4),riser_kl_kla_Y_results(:,3,4),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7');
+xlabel('height(m)','fontsize',18,'fontname','times new roman');
+ylabel('\itk_La\rm(s^{-1})','fontsize',18,'fontname','times new roman');
+title('k_La with height in riser','fontsize',18,'fontname','times new roman');
 legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
 hold off
 box off
@@ -912,14 +952,14 @@ savefig(filename_str);
 filename_index = filename_index + 1;
 
 figure
-plot(riser_kl_kla_Y_results(:,1,1),riser_kl_kla_Y_results(:,4,1),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
+plot(riser_kl_kla_Y_results(:,1,1),riser_kl_kla_Y_results(:,4,1),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
 hold on
-plot(riser_kl_kla_Y_results(:,1,2),riser_kl_kla_Y_results(:,4,2),'s','linestyle','-','linewidth',3,'Color','#103778','markerfacecolor','#103778');
-plot(riser_kl_kla_Y_results(:,1,3),riser_kl_kla_Y_results(:,4,3),'^','linestyle','-','linewidth',3,'Color','#0593a2','markerfacecolor','#0593a2');
-plot(riser_kl_kla_Y_results(:,1,4),riser_kl_kla_Y_results(:,4,4),'v','linestyle','-','linewidth',3,'Color','#ff7a48','markerfacecolor','#ff7a48');
-xlabel('height(m)');
-ylabel('Re');
-title('Re with height in riser');
+plot(riser_kl_kla_Y_results(:,1,2),riser_kl_kla_Y_results(:,4,2),'s','linestyle','-','linewidth',3,'Color','#e22c90','markerfacecolor','#e22c90');
+plot(riser_kl_kla_Y_results(:,1,3),riser_kl_kla_Y_results(:,4,3),'^','linestyle','-','linewidth',3,'Color','#fe8006','markerfacecolor','#fe8006');
+plot(riser_kl_kla_Y_results(:,1,4),riser_kl_kla_Y_results(:,4,4),'v','linestyle','-','linewidth',3,'Color','#05b9c7','markerfacecolor','#05b9c7');
+xlabel('height(m)','fontsize',18,'fontname','times new roman');
+ylabel('Re','fontsize',18,'fontname','times new roman');
+title('Re with height in riser','fontsize',18,'fontname','times new roman');
 legend('GSV = 0.01m/s','GSV = 0.02m/s','GSV = 0.03m/s','GSV = 0.04m/s','location','best');
 hold off
 box off
@@ -944,7 +984,8 @@ filename_index = filename_index + 1;
 % bubble size PDF with various initial bins
 
 g = 1;
-bins = categorical({'0.0114581','0.0088865858','0.0068921905','0.0053453925','0.0041457388','0.0032153205','0.0024937137','0.0019340555','0.0015'});
+bins = categorical({'11.5','8.89','6.89','5.35','4.15','3.22','2.49','1.93','1.5'});
+bins = reordercats(bins,{'11.5','8.89','6.89','5.35','4.15','3.22','2.49','1.93','1.5'});
 for initial_bin_index = 2:1:5
 	title_str = sprintf('Bubbles Fraction at initial bin[%d], GSV = 0.04m/s',initial_bin_index);
 	riser = various_bins_gas{initial_bin_index,1};
@@ -952,7 +993,7 @@ for initial_bin_index = 2:1:5
 	max_index = size(riser_Y_sorted);
 	i = 1;
 	for index = 1:1:max_index(1,1)
-		if(riser_Y_sorted(index,1) >= 0.1 && riser_Y_sorted(index,1) <= 0.7)
+		if(riser_Y_sorted(index,1) >= 0.3 && riser_Y_sorted(index,1) <= 0.7)
 			riser_Y_top(i,1) = riser_Y_sorted(index,1);
 			riser_Y_top(i,11) = riser_Y_sorted(index,3);
 			for j = 2:1:10
@@ -970,11 +1011,10 @@ for initial_bin_index = 2:1:5
 	small_bubble_fraction(g,2) = sum(bin_sum(2:9,1))/sum(bin_sum(:,1));
 	g = g + 1;
 figure
-bar(bins,bin_sum(:,1),'facecolor','#0593a2','edgecolor','#0593a2');
-xlabel('Bubble Diameter (m)');
-ylabel('Bubble Fraction (-)');
-title(title_str);
-ylim([0,0.25]);
+bar(bins,bin_sum(:,1),'facecolor','#fe8006','edgecolor','#fe8006');
+xlabel('Bubble Diameter (mm)','fontsize',18,'fontname','times new roman');
+ylabel('Bubble Fraction (-)','fontsize',18,'fontname','times new roman');
+title(title_str,'fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -994,12 +1034,12 @@ filename_index = filename_index + 1;
 end
 
 figure
-plot(small_bubble_fraction(:,1),small_bubble_fraction(:,2),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Initial bin index');
+plot(small_bubble_fraction(:,1),small_bubble_fraction(:,2),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Initial Bubble Diameter(m)','fontsize',18,'fontname','times new roman');
 xticks([2 3 4 5]);
-xticklabels({'bin[2]','bin[3]','bin[4]','bin[5]'});
-ylabel('Small Bubble Fraction');
-title('Small Bubble Fraction with bins');
+xticklabels({'8.89','6.89','5.35','4.15'});
+ylabel('Small Bubble Fraction','fontsize',18,'fontname','times new roman');
+title('Small Bubble Fraction with Initial Bubble Diameter','fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -1030,12 +1070,12 @@ for initial_bin_index = 2:1:5
 	i = i + 1;
 end
 figure
-plot(various_bins_res(:,1),various_bins_res(:,2),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Initial bin index');
+plot(various_bins_res(:,1),various_bins_res(:,2),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Initial Bubble Diameter(m)','fontsize',18,'fontname','times new roman');
 xticks([2 3 4 5]);
-xticklabels({'bin[2]','bin[3]','bin[4]','bin[5]'});
-ylabel('Overall Gas Holdup');
-title('Overall Gas Holdup with bins');
+xticklabels({'8.89','6.89','5.35','4.15'});
+ylabel('Overall Gas Holdup','fontsize',18,'fontname','times new roman');
+title('Overall Gas Holdup with Initial Bubble Diameter','fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
@@ -1085,12 +1125,12 @@ for initial_bin_index = 2:1:5
 end
 
 figure
-plot(kla_ave(:,1),kla_ave(:,2),'o','linestyle','-','linewidth',3,'Color','#151f30','markerfacecolor','#151f30');
-xlabel('Initial bin index');
+plot(kla_ave(:,1),kla_ave(:,2),'o','linestyle','-','linewidth',3,'Color','#005ead','markerfacecolor','#005ead');
+xlabel('Initial Bubble Diameter(m)','fontsize',18,'fontname','times new roman');
 xticks([2 3 4 5]);
-xticklabels({'bin[2]','bin[3]','bin[4]','bin[5]'});
-ylabel('Overall \it k_La \rm(s^{-1})');
-title('Overall \it k_La \rmwith bins');
+xticklabels({'8.89','6.89','5.35','4.15'});
+ylabel('\it k_La \rm(s^{-1})','fontsize',18,'fontname','times new roman');
+title('\it k_La \rmwith Initial Bubble Diameter','fontsize',18,'fontname','times new roman');
 box off
 ax2 = axes('Position',get(gca,'Position'),...
            'XAxisLocation','top',...
