@@ -1,0 +1,27 @@
+from numpy import *
+from numpy.linalg import *
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
+maxIter = 200000
+Re = 100.0
+nx = 520
+ny = 180
+ly = ny - 1.0
+q = 9
+cx = nx/4
+cy = ny/2
+r = ny/9
+uLB = 0.04
+nulb = uLB * r/Re #模型流体的黏性系数？什么系数要用到圆柱的半径
+omega = 1.0 / (3.*nulb + 0.5) #弛豫时间
+c = array([(x,y) for x in [0,-1,1] for y in [0,-1,1]]) #格子方向
+t = 1./36. * ones(q) #ones：创建每个元素值为1，大小为q的数组
+t[asarray([norm(ci)<1.1 for ci in c])] = 1./9. #asarray:类似拷贝的概念;norm 的作用是求范数，默认情况下求的是根号x^2+y^2+z^2+....^2
+t[0] = 4./9. # 把（0，0）处权值定为4/9；numpy为下标0开始元素索引一直到最后一个。
+noslip = [c.tolist().index(-c[i].tolist()) for i in range(q)] #tolist函数：转化为列表；index(x)：查找x元素所在的索引值；range函数的范围是0~q-1；该条的意思为生成一个反向的格子速度矩阵。
+
+i1 = arange(q)[asarray([ci[0]<0 for ci in c])]
+i2 = arange(q)[asarray([ci[0]==0 for ci in c])]
+i3 = arange(q)[asarray([ci[0]>0 for ci in c])]  #得到0 1 2；3 4 5；6 7 8 三个不同的方向的下标
+
