@@ -1,3 +1,4 @@
+#-- coding:UTF-8 --
 # 2D flow around a cylinder
 from numpy import *
 from numpy.linalg import *
@@ -20,7 +21,7 @@ i2 = arange(q)[asarray([ci[0]==0 for ci in c])] # Vertical middle.
 i3 = arange(q)[asarray([ci[0]>0  for ci in c])] # Unknown on left wall.
  
 ###### Function Definitions ####################################################
-sumpop = lambda fin: sum(fin,axis=0) # Helper function for density computation.
+sumpop = lambda fin: sum(fin,axis=0) # Helper function for density computation.axis=0：每一行相加
 def equilibrium(rho,u):              # Equilibrium distribution function.
     cu   = 3.0 * dot(c,u.transpose(1,0,2))
     usqr = 3./2.*(u[0]**2+u[1]**2)
@@ -31,7 +32,7 @@ def equilibrium(rho,u):              # Equilibrium distribution function.
 ###### Setup: cylindrical obstacle and velocity inlet with perturbation ########
 obstacle = fromfunction(lambda x,y: (x-cx)**2+(y-cy)**2<r**2, (nx,ny))
  
-#vel用于初始化速度，d的取值是0，1，代表x方向和y方向，ulb后面的代表微小偏量
+#vel用于初始化速度，d的取值是0，1，代表x方向和y方向，ulb后面的代表微小偏量####
 #其实直接全部赋值0.04也没关系
 #vel = fromfunction(lambda d,x,y: (1-d)*uLB*(1.0+1e-4*sin(y/ly*2*pi)),(2,nx,ny))
 vel = fromfunction(lambda d,x,y: (1-d)*uLB,(2,nx,ny))
