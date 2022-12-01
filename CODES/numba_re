@@ -1,0 +1,27 @@
+from numba import njit
+from numpy import *
+from numpy.linalg import *
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
+maxIter = 200000
+Re = 220.0
+nx = 520
+ny = 180
+ly =ny-1.0
+q = 9
+cx = nx/4
+cy = ny/2
+r = ny/9
+uLB = 0.04
+nulb = uLB*r/Re
+omege = 1.0 / (3.*nulb + 0.5)
+
+c = array([(x,y) for x in [0,-1,1] for y in [0,-1,1]])
+t = 1./36. * ones(q)
+t[asarray([norm(ci)<1.1 for ci in c])] = 1./9.; t[0] = 4./9.
+noslip = [c.tolist().index((-c[i]).tolist()) for i in range(q)] 
+i1 = arange(q)[asarray([ci[0]<0  for ci in c])] 
+i2 = arange(q)[asarray([ci[0]==0 for ci in c])] 
+i3 = arange(q)[asarray([ci[0]>0  for ci in c])]
+

@@ -1,8 +1,10 @@
 #-- coding:UTF-8 --
 # 2D flow around a cylinder
+from numba import njit
 from numpy import *
 from numpy.linalg import *
-import matplotlib.pyplot as plt; from matplotlib import cm
+import matplotlib.pyplot as plt
+from matplotlib import cm
 ###### Flow definition #########################################################
 maxIter = 200000 # Total number of time iterations.
 Re      = 220.0  # Reynolds number.
@@ -22,6 +24,7 @@ i3 = arange(q)[asarray([ci[0]>0  for ci in c])] # Unknown on left wall.
  
 ###### Function Definitions ####################################################
 sumpop = lambda fin: sum(fin,axis=0) # Helper function for density computation.axis=0：每一行相加
+
 def equilibrium(rho,u):              # Equilibrium distribution function.
     cu   = 3.0 * dot(c,u.transpose(1,0,2))
     usqr = 3./2.*(u[0]**2+u[1]**2)
@@ -41,7 +44,7 @@ feq = equilibrium(1.0,vel); fin = feq.copy()
  
 w=zeros((9,nx,ny))
 w[:,obstacle]=1
- 
+
  
 ###### Main time loop ##########################################################
 for time in range(maxIter):
